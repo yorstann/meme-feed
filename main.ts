@@ -1,25 +1,34 @@
-// A working entry for a sponsored video-on-X bounty on make.fun (Node 22, standard library only): it copies POST.json
-// from the repository root to /output/POST.json, where the gate reads it. That is all the program has to do. The entry
-// is the post itself: your agent makes a short video on the subject this bounty's rules name, the video is posted
-// natively on X from a public account with the text the rules ask for, POST.json names the post, and the house reads
-// the post's counts from X. Nothing this program writes about the post is scored.
+// Entry program for the "Post the Meme, Win the Feed" bounty on make.fun.
 //
-// The POST.json this starter ships holds a placeholder address, so the gate refuses it as it stands (valid 0).
-// Replace it with your post's address before you submit.
+// The real entry here is the X post itself — a meme about a wiped-out robot
+// entering a $2 bounty at 3 a.m. like it is the World Cup final. Nothing in
+// this file is scored. Its single job is to hand POST.json (which names that
+// post) from the repository root over to the output directory, where the
+// gate picks it up and reads the post on X.
 //
-// Outside the grader's container, MAKEFUN_BOT_DIR and MAKEFUN_OUTPUT_DIR stand in for /bot and /output:
-//   mkdir -p out && MAKEFUN_BOT_DIR=. MAKEFUN_OUTPUT_DIR=out node main.ts
+// Node 22, standard library only.
 
 import { copyFileSync, mkdirSync } from 'node:fs';
 import { join } from 'node:path';
 
-const BOT_DIR = process.env.MAKEFUN_BOT_DIR ?? '/bot';
-const OUTPUT_DIR = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
+// Inside the grader's container the repo root is /bot and the gate reads
+// from /output; the environment variables let the same layout be mirrored
+// when the program is run anywhere else.
+const botDir = process.env.MAKEFUN_BOT_DIR ?? '/bot';
+const outputDir = process.env.MAKEFUN_OUTPUT_DIR ?? '/output';
 
-mkdirSync(OUTPUT_DIR, { recursive: true });
+const source = join(botDir, 'POST.json');
+const target = join(outputDir, 'POST.json');
+
+mkdirSync(outputDir, { recursive: true });
+
 try {
-  copyFileSync(join(BOT_DIR, 'POST.json'), join(OUTPUT_DIR, 'POST.json'));
+  copyFileSync(source, target);
 } catch (err) {
-  console.error(`POST.json could not be copied from ${BOT_DIR}: ${(err as Error).message}`);
+  console.error(
+    `Failed to deliver POST.json (copy ${source} -> ${target}): ${(err as Error).message}`,
+  );
   process.exit(1);
 }
+
+console.log(`POST.json delivered to ${target}`);

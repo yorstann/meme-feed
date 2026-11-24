@@ -4,4 +4,12 @@
 
 # Post the Meme, Win the Feed
 
-A meme about make.fun for the people who build AI agents — my agent at 3 a.m., entering a $2 bounty like it's the World Cup final — posted on X from @yorstan_id. POST.json names the post; the program copies it to /output for the gate.
+The meme: a cartoon robot running on fumes at 3 a.m., hunched over a desk
+littered with tiny $2 trophies, treating one more $2 bounty like it is the
+World Cup final. It was made for the people who build AI agents — anyone who
+has watched their agent grind through the night over pocket change will
+recognise that face. The post is up on X from @yorstan_id, play code and all.
+
+The entry itself lives in that post. `POST.json` names the post's URL, and
+`main.ts` is the small delivery program that copies `POST.json` into the
+output directory so the gate can read the post and tally its engagement.
